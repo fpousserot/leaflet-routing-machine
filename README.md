@@ -84,7 +84,7 @@ To customize interactions, you can use the underlying classes that ```L.Routing.
 
 ### L.Routing.OSRM
 
-Handles communication with the OSRM backend, building the request and parsing the response.
+Handles communication with the OSRM backend, building the request and parsing the response. Implements ```IRoute```.
 
 ### L.Routing.Line
 
@@ -93,3 +93,34 @@ Displays a route on the map, and allows moving waypoints, as well as adding new 
 ### L.Routing.Itinerary
 
 Displays itineraries as text in a control.
+
+### API
+
+## IRouter
+
+### Methods
+
+* ```Route(waypoints)``` - attempt to route through the provided waypoints, where each waypoint is a
+  ```L.LatLng```. Fire ```routefound``` when done, or ```error``` if an error is encountered.
+
+### Events
+
+* ```routefound``` - fired when a routing request completes with one or more route alternatives. The
+  event object contains the ```routes``` property, which holds an array of possible routing alternatives;
+  each element is an ```IRoute```.
+
+## IRoute
+
+Describes a route through a number of waypoints.
+
+### Properties
+
+* ```name``` (string) - a descriptive name for this route
+* ```summary``` (object) - an object containing two properties:
+    * ```totalTime``` (Number) - estimated time for the route, in seconds
+    * ```totalDistance``` (Number) - distance for the route, in meters
+* ```coordinates``` ([```L.LatLng```]) - an array of ```L.LatLng```s that can be used
+  to visualize the route; the level of detail should be high, since
+  Leaflet will simplify the line appropriately when it is displayed
+* ```waypoints``` - [```L.LatLng```] - the waypoints for this route
+* ```instructions``` - [```IInstruction```] - instructions for this route
